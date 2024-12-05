@@ -1,0 +1,33 @@
+version: '3.3'
+
+services:
+  bitcoind-mainnet:
+    image: kylemanna/bitcoind
+    volumes:
+      - /rpool/bitcoin/mainnet/bitcoind-data:/bitcoin/.bitcoin
+    ports:
+      - mode: host
+        target: 8332
+        published: 8332
+    env_file: envs/bitcoind-mainnet.env
+
+  electrumx:
+    image: lukechilds/electrumx
+    environment:
+      - DAEMON_URL=http://bitcoin:***LONG_AND_SECURE_PASSWORD***@test_bitcoind-mainnet:8332
+      - COIN=Bitcoin
+      - DB_DIRECTORY=/data
+      - SERVICES=tcp://0.0.0.0:50001,ssl://0.0.0.0:50002
+    volumes:
+      - /rpool/bitcoin/electrumx:/data
+    ports:
+      - "50001:50001"
+      - "50002:50002"
+    depends_on:
+      - bitcoind-mainnet
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "256m"
+        max-file: "5"
+

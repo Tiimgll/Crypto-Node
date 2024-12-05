@@ -1,0 +1,28 @@
+version: '3.3'
+
+services:
+  tron:
+    image: tronprotocol/java-tron:GreatVoyage-v4.7.5
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "256m"
+        max-file: "5"
+    volumes:
+      - /rpool/tron/mainnet/output-directory:/java-tron/output-directory # need 2TB
+      - /rpool/tron/mainnet/logs:/java-tron/logs
+      - /rpool/tron/mainnet/config/main_net_config.conf:/config/main_net_config.conf:ro
+    command:
+      - "-d"
+      - "/java-tron/output-directory"
+      - "-c"
+      - "/config/main_net_config.conf"
+      - "-jvm"
+      - "{-Xmx24g -Xms24g -Xmn4g -XX:MaxDirectMemorySize=2g -XX:+UseConcMarkSweepGC}"
+    ports:
+      - mode: host
+        target: 8090
+        published: 8090
+      - mode: host
+        target: 8091
+        published: 8091
