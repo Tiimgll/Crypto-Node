@@ -1,0 +1,45 @@
+version: '3.8'
+
+services:
+  ethereum-mainnet:
+    image: ethereum/client-go:latest
+    restart: always
+    container_name: ethereum-node-mainnet
+    command: >
+        --port 30303
+        --authrpc.jwtsecret=/jwtsecret
+        --authrpc.port 8551
+        --authrpc.addr=0.0.0.0
+        --authrpc.vhosts ethereum-mainnet
+        -cache 8000
+        --txlookuplimit 0
+        --syncmode snap
+        --gcmode full
+        --verbosity 4
+    volumes:
+      - /rpool/eth/mainnet/data/ethereum:/root/.ethereum
+      - /rpool/eth/mainnet/jwtsecret:/jwtsecret
+    ports:
+      - mode: host
+        target: 8551
+        published: 8551
+
+  lighthouse-mainnet:
+    container_name: lighthouse
+    image: sigp/lighthouse:latest
+    restart: always
+    command: >
+      lighthouse
+       --network mainnet
+       beacon
+       --http
+       --http-address=0.0.0.0
+       --http-port=5052
+       --execution-endpoint=http://ethereum-mainnet:8551
+       --execution-jwt=/jwtsecret
+       --checkpoint-sync-url=https://beaconstate.ethstaker.cc
+    environment:
+      - RUST_BACKTRACE=full
+    volumes:
+      - /rpool/eth/mainnet/data/lighthouse:/root/.lighthouse
+      - /rpool/eth/mainnet/jwtsecret:/jwtsecret

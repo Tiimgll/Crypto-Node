@@ -1,4 +1,4 @@
-# Настройка Docker, Docker Swarm и запуск сервисов Bitcoin
+# Настройка Docker и запуск сервисов Bitcoin
 
 ## Настройка и запуск сервисов Bitcoin
 
