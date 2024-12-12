@@ -1,0 +1,19 @@
+version: "3.8"
+
+services:
+  monero:
+    build:
+      context: . 
+    container_name: monero-node
+    volumes:
+      - /rpool/monero/mainnet/bitmonero:/root/.bitmonero
+      - /rpool/monero/mainnet/wallet:/wallet
+      - /rpool/monero/mainnet/config:/config
+    ports:
+      - "18080:18080"
+      - "18081:18081"
+      - "18083:18083"
+    environment:
+      MONERO_RPC_USER: rpcuser
+      MONERO_RPC_PASSWORD: rpcpassword
+    restart: unless-stopped
