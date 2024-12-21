@@ -14,7 +14,7 @@ RUN wget https://downloads.getmonero.org/linux64 -O monero.tar.bz2 && \
 
 RUN mkdir -p /var/log/supervisor /root/.bitmonero /wallet /config
 
-EXPOSE 18080 18081 18083
+EXPOSE 18080 18081 18083 18084 18085 18086 18087
 
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
